@@ -1,0 +1,417 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Process" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mva="clr-namespace:Microsoft.VisualBasic.Activities;assembly=System.Activities" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:this="clr-namespace:" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property sap2010:Annotation.AnnotationText="Dictionary structure to store configuration data of the process (settings, constants and assets)." Name="in_Config" Type="InArgument(scg:Dictionary(x:String, x:Object))" />
+    <x:Property sap2010:Annotation.AnnotationText="Transaction item to be processed." Name="in_TransactionRow" Type="InArgument(sd:DataRow)" />
+    <x:Property Name="io_TransactionData" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="io_TransactionNumber" Type="InOutArgument(x:Int32)" />
+    <x:Property Name="in_dtDom" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtKGS" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtRostelecom" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtWithProvidersShablon" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtWOproviders" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtFinal" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtFiltredProviders" Type="InArgument(sd:DataTable)" />
+    <x:Property Name="in_dtAllProviders" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <this:Process.in_dtFiltredProviders>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:Process.in_dtFiltredProviders>
+  <this:Process.in_dtAllProviders>
+    <InArgument x:TypeArguments="sd:DataTable" />
+  </this:Process.in_dtAllProviders>
+  <mva:VisualBasic.Settings>
+    <x:Null />
+  </mva:VisualBasic.Settings>
+  <sap:VirtualizedContainerService.HintSize>868,3022</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ProcessTransaction_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="24">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Activities.Validation</x:String>
+      <x:String>System.Activities.XamlIntegration</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>Microsoft.VisualBasic.Activities</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>UiPath.Core</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Windows.Markup</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Excel</x:String>
+      <x:String>Microsoft.VisualBasic.CompilerServices</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="25">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualStudio.Services.Common</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.CV</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <sap:WorkflowViewStateService.ViewState>
+    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+      <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
+      <x:Boolean x:Key="ShouldExpandAll">False</x:Boolean>
+    </scg:Dictionary>
+  </sap:WorkflowViewStateService.ViewState>
+  <Sequence sap2010:Annotation.AnnotationText="Search for cheapest tariff plans and write results to Excel file." DisplayName="Processes" sap:VirtualizedContainerService.HintSize="827,2857" sap2010:WorkflowViewState.IdRef="Sequence_139">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:IEnumerable(x:Object)" Name="enumGettedPrices" />
+      <Variable x:TypeArguments="ui:GenericValue" Name="genRowsCount" />
+      <Variable x:TypeArguments="x:Int32" Name="index" />
+      <Variable x:TypeArguments="x:Int32" Name="intMax" />
+      <Variable x:TypeArguments="s:Int32[]" Name="intArray" />
+      <Variable x:TypeArguments="x:Int32" Name="intMin" />
+      <Variable x:TypeArguments="s:String[]" Name="arrOrdersArray" />
+      <Variable x:TypeArguments="x:String" Name="strCheckRT" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtRTwithProviders" />
+      <Variable x:TypeArguments="x:String" Name="strCheckKGS" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtKGSwithProviders" />
+      <Variable x:TypeArguments="x:String" Name="strCheckDom" />
+      <Variable x:TypeArguments="sd:DataTable" Name="dtDomwithProviders" />
+      <Variable x:TypeArguments="x:String" Name="strExcelName" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">True</x:Boolean>
+        <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence sap2010:Annotation.AnnotationText="Write info about Providers and etc." DisplayName="Write info in Excel file" sap:VirtualizedContainerService.HintSize="785,549" sap2010:WorkflowViewState.IdRef="Sequence_149">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:ClearDataTable DataTable="[in_dtFinal]" DisplayName="Clear Data Table" sap:VirtualizedContainerService.HintSize="262,22" sap2010:WorkflowViewState.IdRef="ClearDataTable_6" />
+      <Assign sap2010:Annotation.AnnotationText="The name of Excel file" DisplayName="strExcelName" sap:VirtualizedContainerService.HintSize="262,91" sap2010:WorkflowViewState.IdRef="Assign_74">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[strExcelName]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">["Тарифы для адреса "+io_TransactionData.Rows(io_TransactionNumber-1).Item(0).ToString+".xlsx"]</InArgument>
+        </Assign.Value>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </Assign>
+      <ui:WriteCell Cell="A1" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="262,51" sap2010:WorkflowViewState.IdRef="WriteCell_1" SheetName="[in_Config(&quot;strSheetItog&quot;).ToString]" Text="[io_TransactionData.Rows(io_TransactionNumber-1).Item(0).ToString]" WorkbookPath="[strExcelName]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:WriteCell>
+      <ui:WriteRange AddHeaders="False" DataTable="[in_dtAllProviders]" DisplayName="Write the sheet &quot;Все провайдеры&quot;" sap:VirtualizedContainerService.HintSize="262,51" sap2010:WorkflowViewState.IdRef="WriteRange_21" SheetName="[in_Config(&quot;AllProviders&quot;).ToString]" StartingCell="A1" WorkbookPath="[strExcelName]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:WriteRange>
+      <ui:WriteRange AddHeaders="False" DataTable="[in_dtFiltredProviders]" DisplayName="Write the sheet &quot;Доступные&quot;" sap:VirtualizedContainerService.HintSize="262,51" sap2010:WorkflowViewState.IdRef="WriteRange_20" SheetName="[in_Config(&quot;FiltredProviders&quot;).ToString]" StartingCell="A1" WorkbookPath="[strExcelName]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:WriteRange>
+    </Sequence>
+    <Sequence sap2010:Annotation.AnnotationText="Write to Excel file info about all tariff planes of providers.&#xA;Write info about chipiest tariff planes." DisplayName="Work with all tables" sap:VirtualizedContainerService.HintSize="785,2039" sap2010:WorkflowViewState.IdRef="Sequence_147">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Check if &quot;Ростелеком&quot; is in the filtred table. And add info." DataTable="[in_dtFiltredProviders]" DisplayName="For Each Row RT" sap:VirtualizedContainerService.HintSize="743,598" sap2010:WorkflowViewState.IdRef="ForEachRow_7">
+        <ui:ForEachRow.Body>
+          <ActivityAction x:TypeArguments="sd:DataRow">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="693,419" sap2010:WorkflowViewState.IdRef="Sequence_69">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If Condition="[string.Join(&quot;,&quot;,row.ItemArray).Contains(in_Config(&quot;strSheetRT&quot;).ToString)]" DisplayName="If &quot;Ростелеком&quot; exists" sap:VirtualizedContainerService.HintSize="651,327" sap2010:WorkflowViewState.IdRef="If_18">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <If.Then>
+                  <Sequence DisplayName="If &quot;Ростелеком&quot; exists" sap:VirtualizedContainerService.HintSize="376,179" sap2010:WorkflowViewState.IdRef="Sequence_68">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke Rostelecom" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_1" UnSafe="False" WorkflowFileName="Framework\Rostelecom.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtAllProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtAllProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                          <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtRostelecom">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtRostelecom" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtWithProvidersShablon">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtWithProvidersShablon" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtFiltredProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtFiltredProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_strExcelName">
+                          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="strExcelName" />
+                        </InArgument>
+                        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="io_dtFinal">
+                          <mva:VisualBasicReference x:TypeArguments="sd:DataTable" ExpressionText="in_dtFinal" />
+                        </InOutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </If.Then>
+                <If.Else>
+                  <WriteLine DisplayName="Write Line" sap:VirtualizedContainerService.HintSize="230,61" sap2010:WorkflowViewState.IdRef="WriteLine_32" Text="No RT" />
+                </If.Else>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEachRow.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEachRow>
+      <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Check if &quot;Казанская городская сеть&quot; is in the filtred table. And add info" DataTable="[in_dtFiltredProviders]" DisplayName="For Each Row KGS" sap:VirtualizedContainerService.HintSize="743,629" sap2010:WorkflowViewState.IdRef="ForEachRow_9">
+        <ui:ForEachRow.Body>
+          <ActivityAction x:TypeArguments="sd:DataRow">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="563,450" sap2010:WorkflowViewState.IdRef="Sequence_86">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If sap2010:Annotation.AnnotationText="Check if &quot;Казанская городская сесть&quot; is in the filtred table." Condition="[string.Join(&quot;,&quot;,row.ItemArray).Contains(in_Config(&quot;strSheetKGS&quot;).ToString)]" DisplayName="If &quot;Казанская городская сеть&quot; exists" sap:VirtualizedContainerService.HintSize="521,358" sap2010:WorkflowViewState.IdRef="If_24">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                    <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <If.Then>
+                  <Sequence DisplayName="If &quot;Казанская городская сеть&quot; exists" sap:VirtualizedContainerService.HintSize="376,179" sap2010:WorkflowViewState.IdRef="Sequence_85">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke KGS" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_2" UnSafe="False" WorkflowFileName="Framework\KGS.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtAllProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtAllProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                          <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtKGS">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtKGS" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtWithProvidersShablon">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtWithProvidersShablon" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtFiltredProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtFiltredProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_strExcelName">
+                          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="strExcelName" />
+                        </InArgument>
+                        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="io_dtFinal">
+                          <mva:VisualBasicReference x:TypeArguments="sd:DataTable" ExpressionText="in_dtFinal" />
+                        </InOutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </If.Then>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEachRow.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEachRow>
+      <ui:ForEachRow CurrentIndex="{x:Null}" sap2010:Annotation.AnnotationText="Check if &quot;Дом.ru&quot; is in the filtred table. And add info." DataTable="[in_dtFiltredProviders]" DisplayName="For Each Row Dom" sap:VirtualizedContainerService.HintSize="743,598" sap2010:WorkflowViewState.IdRef="ForEachRow_13">
+        <ui:ForEachRow.Body>
+          <ActivityAction x:TypeArguments="sd:DataRow">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="sd:DataRow" Name="row" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="563,419" sap2010:WorkflowViewState.IdRef="Sequence_120">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                  <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <If Condition="[string.Join(&quot;,&quot;,row.ItemArray).Contains(in_Config(&quot;strSheetDom&quot;).ToString)]" DisplayName="If check if the " sap:VirtualizedContainerService.HintSize="521,327" sap2010:WorkflowViewState.IdRef="If_34">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <If.Then>
+                  <Sequence DisplayName="If &quot;Дом.ru&quot; exists" sap:VirtualizedContainerService.HintSize="376,179" sap2010:WorkflowViewState.IdRef="Sequence_148">
+                    <sap:WorkflowViewStateService.ViewState>
+                      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                        <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                      </scg:Dictionary>
+                    </sap:WorkflowViewStateService.ViewState>
+                    <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke DomRu" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_3" UnSafe="False" WorkflowFileName="Framework\DomRu.xaml">
+                      <ui:InvokeWorkflowFile.Arguments>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtAllProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtAllProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="scg:Dictionary(x:String, x:Object)" x:Key="in_Config">
+                          <mva:VisualBasicValue x:TypeArguments="scg:Dictionary(x:String, x:Object)" ExpressionText="in_Config" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtDom">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtDom" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtWithProvidersShablon">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtWithProvidersShablon" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="sd:DataTable" x:Key="in_dtFiltredProviders">
+                          <mva:VisualBasicValue x:TypeArguments="sd:DataTable" ExpressionText="in_dtFiltredProviders" />
+                        </InArgument>
+                        <InArgument x:TypeArguments="x:String" x:Key="in_strExcelName">
+                          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="strExcelName" />
+                        </InArgument>
+                        <InOutArgument x:TypeArguments="sd:DataTable" x:Key="io_dtFinal">
+                          <mva:VisualBasicReference x:TypeArguments="sd:DataTable" ExpressionText="in_dtFinal" />
+                        </InOutArgument>
+                      </ui:InvokeWorkflowFile.Arguments>
+                      <sap:WorkflowViewStateService.ViewState>
+                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                          <x:Boolean x:Key="IsPinned">True</x:Boolean>
+                        </scg:Dictionary>
+                      </sap:WorkflowViewStateService.ViewState>
+                    </ui:InvokeWorkflowFile>
+                  </Sequence>
+                </If.Then>
+              </If>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEachRow.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEachRow>
+    </Sequence>
+    <Sequence DisplayName="Write th sheet &quot;Итоговая информация&quot;" sap:VirtualizedContainerService.HintSize="785,66" sap2010:WorkflowViewState.IdRef="Sequence_138">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <ui:WriteRange AddHeaders="True" sap2010:Annotation.AnnotationText="Input to the sheet &quot;Итоговая информация&quot; final table with all chipiest tarif plans." DataTable="[in_dtFinal]" DisplayName="Write table to the sheet" sap:VirtualizedContainerService.HintSize="334,108" sap2010:WorkflowViewState.IdRef="WriteRange_19" SheetName="[in_Config(&quot;strSheetItog&quot;).ToString]" StartingCell="A3" WorkbookPath="[strExcelName]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsAnnotationDocked">True</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:WriteRange>
+      <ui:ClearDataTable DataTable="[in_dtAllProviders]" DisplayName="Clear Data Table" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="ClearDataTable_1" />
+      <ui:ClearDataTable DataTable="[in_dtFiltredProviders]" DisplayName="Clear Data Table" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="ClearDataTable_5" />
+      <ui:ClearDataTable DataTable="[in_dtFinal]" DisplayName="Clear Data Table" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="ClearDataTable_2" />
+      <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" DisplayName="Message Box" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="MessageBox_2" Text="[&quot;Успешно завершено для &quot;+io_TransactionData.Rows(io_TransactionNumber-1).Item(0).ToString]">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:MessageBox>
+    </Sequence>
+  </Sequence>
+</Activity>
